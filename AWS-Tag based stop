@@ -1,0 +1,20 @@
+	import boto3
+
+
+	def lambda_handler(event, context):
+		client=boto3.client('ec2')
+		response = client.describe_instances(
+			Filters=[
+			{
+				'Name': 'tag:Autooff',
+				'Values': ['yes']
+			},
+			])
+		
+		for item in response['Reservations']:
+			b=(item['Instances'])
+			for betas in b:
+				print(betas['InstanceId'])
+				resp = client.stop_instances(
+				InstanceIds=[betas['InstanceId']])
+
